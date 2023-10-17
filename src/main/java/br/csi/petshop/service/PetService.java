@@ -3,12 +3,15 @@ package br.csi.petshop.service;
 import br.csi.petshop.model.pet.DadosPet;
 import br.csi.petshop.model.pet.Pet;
 import br.csi.petshop.model.pet.PetRepository;
+import br.csi.petshop.model.servico.DadosServico;
+import br.csi.petshop.model.servico.Servico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +54,7 @@ public class PetService {
     }
 
     private DadosPet convertToDadosPet(Pet pet) {
-        return new DadosPet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente());
+        return new DadosPet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente().getId(), pet.getCliente().getNome());
     }
 
 }

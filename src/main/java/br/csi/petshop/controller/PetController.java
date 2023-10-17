@@ -39,13 +39,15 @@ public class PetController {
     public ResponseEntity criar(@RequestBody @Valid Pet pet,
                                 @RequestHeader("Authorization") String token) {
         String emailUsuario = extrairIdDoToken(token);
-        System.out.println(emailUsuario);
 
         if(emailUsuario == null){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cliente não encontrado na base de dados.");
         }
 
         Cliente cliente = clienteRepository.findByEmail(emailUsuario);
+        if(cliente == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cliente não encontrado na base de dados.");
+        }
             pet.setCliente(cliente);
             petService.cadastrar(pet);
         return ResponseEntity.created(URI.create("/pet/" + pet.getId())).body(pet);

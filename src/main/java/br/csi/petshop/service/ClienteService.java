@@ -3,24 +3,36 @@ package br.csi.petshop.service;
 import br.csi.petshop.model.cliente.Cliente;
 import br.csi.petshop.model.cliente.DadosCliente;
 import br.csi.petshop.model.cliente.ClienteRepository;
+import br.csi.petshop.model.usuario.Usuario;
+import br.csi.petshop.model.usuario.UsuarioPermissao;
+import br.csi.petshop.model.usuario.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
     private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository, UsuarioRepository usuarioRepository) {
         this.clienteRepository = clienteRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public void cadastrar(Cliente cliente, String token) {
-            clienteRepository.save(cliente);
+        Usuario u = new Usuario();
+        Usuario t = this.usuarioRepository.findByLogin(cliente.getEmail());
+        u.setLogin(cliente.getEmail());
+        u.setSenha(new BCryptPasswordEncoder().encode("123456789"));
+        u.setPermissao(UsuarioPermissao.CLIENTE);
+
+        clienteRepository.save(cliente);
+        usuarioRepository.save(u);
     }
 
     public ResponseEntity<?> deletar(Long id){

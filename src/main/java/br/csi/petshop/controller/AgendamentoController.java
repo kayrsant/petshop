@@ -26,11 +26,11 @@ public class AgendamentoController {
 
     @PostMapping("/criar")
     @Transactional
-    public ResponseEntity criar(@RequestBody @Valid Agendamento agendamento,
+    public ResponseEntity<?> criar(@RequestBody @Valid Agendamento agendamento,
                                 @RequestHeader("Authorization") String token) {
-        agendamentoService.cadastrar(agendamento);
+        ;
         URI uri = URI.create("/agendamento/" + agendamento.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(agendamento);
+        return agendamentoService.cadastrar(agendamento);
     }
 
     @GetMapping("/{id}")

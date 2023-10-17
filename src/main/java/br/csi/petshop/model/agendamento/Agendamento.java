@@ -1,8 +1,10 @@
 package br.csi.petshop.model.agendamento;
 
 import br.csi.petshop.model.cliente.Cliente;
+import br.csi.petshop.model.cliente.ClienteRepository;
 import br.csi.petshop.model.funcionario.Funcionario;
 import br.csi.petshop.model.pet.Pet;
+import br.csi.petshop.service.ClienteService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,10 +52,6 @@ public class Agendamento {
     @OneToMany(mappedBy = "agendamento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoAgendamento> servicos = new ArrayList<>();
 
-    public DadosAgendamento criarDTO() {
-        return DadosAgendamento.criarDTO(this);
-    }
-
     public Long getId() {
         return id;
     }
@@ -61,7 +59,6 @@ public class Agendamento {
     public void setId(Long id) {
         this.id = id;
     }
-
     public Cliente getCliente() {
         return cliente;
     }
@@ -98,7 +95,7 @@ public class Agendamento {
         return valor;
     }
 
-    public void setValor(BigDecimal valorTotal) {
+    public void setValor(double valor) {
         this.valor = valor;
     }
 

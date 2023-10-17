@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +48,28 @@ public class ServicoService {
         return servicos.stream()
                 .map(this::convertToDadosServico)
                 .collect(Collectors.toList());
+    }
+
+    public ResponseEntity<?> atualizar(Long id, Servico servicoAtualizado){
+        try{
+            Optional<Servico> servicoExistenteOpt = this.servicoRepository.findById(id);
+
+            if(servicoExistenteOpt.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Serviço não encontrado.");
+            }
+
+            Servico servicoExistente = servicoExistenteOpt.get();
+
+            servicoExistente.setNome(servicoAtualizado.getNome());
+            servicoExistente.setDescricao(servicoAtualizado.getDescricao());
+            servicoExistente.setPreco(servicoAtualizado.getPreco());
+
+            this.servicoRepository.save(servicoExistente);
+
+            return ResponseEntity.ok(new DadosServico(servicoExistente.getId(), servicoExistente.getNome(), servicoExistente.getDescricao(), servicoExistente.getPreco()));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar serviço: " + e.getMessage());
+        }
     }
 
     private DadosServico convertToDadosServico(Servico servico) {

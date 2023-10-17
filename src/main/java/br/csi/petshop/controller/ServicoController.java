@@ -51,4 +51,9 @@ public class ServicoController {
         return servicoService.deletar(id);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid Servico servico){
+        return servicoService.atualizar(id, servico);
+    }
+
 }
