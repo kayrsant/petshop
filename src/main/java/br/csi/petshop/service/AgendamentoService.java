@@ -87,5 +87,23 @@ public class AgendamentoService {
         return new DadosAgendamento(agendamento.getId(), agendamento.getCliente().getId(), agendamento.getPet().getId(), agendamento.getFuncionario().getId(), agendamento.getData(), agendamento.getValor());
     }
 
+    public ResponseEntity<?> atualizar(Long id, Agendamento agendamentoAtualizado) {
+        Optional<Agendamento> agendamentoExistente = agendamentoRepository.findById(id);
+
+        if (agendamentoExistente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Agendamento não encontrado.");
+        }
+
+        Agendamento agendamento = agendamentoExistente.get();
+        agendamento.setData(agendamentoAtualizado.getData());
+        agendamento.setPet(agendamentoAtualizado.getPet());
+        agendamento.setValor(agendamentoAtualizado.getValor());
+
+        agendamentoRepository.save(agendamento);
+
+        DadosAgendamento dadosAgendamentoAtualizado = convertToDadosAgendamento(agendamento);
+        return ResponseEntity.ok(dadosAgendamentoAtualizado);
+    }
+
 
 }

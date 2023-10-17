@@ -46,6 +46,13 @@ public class ClienteController {
         return clienteService.deletar(id);
     }
 
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> atualizar(@PathVariable Long id,
+                                       @RequestBody @Valid Cliente clienteAtualizado) {
+        return clienteService.atualizar(id, clienteAtualizado);
+    }
+
 }
 
 

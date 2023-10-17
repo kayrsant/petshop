@@ -51,6 +51,22 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
+    public ResponseEntity<?> atualizar(Long id, Produto produtoAtualizado) {
+        Produto produto = produtoRepository.findById(id).orElse(null);
+
+        if (produto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
+        }
+
+        produto.setNome(produtoAtualizado.getNome());
+        produto.setDescricao(produtoAtualizado.getDescricao());
+        produto.setPreco(produtoAtualizado.getPreco());
+        produto.setTipo(produtoAtualizado.getTipo());
+
+        produtoRepository.save(produto);
+        return ResponseEntity.ok(produtoAtualizado);
+    }
+
     private DadosProduto convertToDadosProduto(Produto produto) {
         return new DadosProduto(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getPreco(), produto.getTipo());
     }

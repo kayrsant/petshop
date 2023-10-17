@@ -1,5 +1,6 @@
 package br.csi.petshop.service;
 
+import br.csi.petshop.model.cliente.Cliente;
 import br.csi.petshop.model.funcionario.DadosFuncionario;
 import br.csi.petshop.model.funcionario.Funcionario;
 import br.csi.petshop.model.funcionario.FuncionarioRepository;
@@ -62,6 +63,26 @@ public class FuncionarioService {
         return funcionarios.stream()
                 .map(this::convertToDadosFuncionario)
                 .collect(Collectors.toList());
+    }
+
+    public ResponseEntity<?> atualizar(Long id, Funcionario funcionarioAtualizado) {
+        return funcionarioRepository.findById(id)
+                .map(funcionario -> {
+                    funcionario.setNome(funcionarioAtualizado.getNome());
+                    funcionario.setTelefone(funcionarioAtualizado.getTelefone());
+                    funcionario.setEmail(funcionarioAtualizado.getEmail());
+                    funcionario.setRua(funcionarioAtualizado.getRua());
+                    funcionario.setBairro(funcionarioAtualizado.getBairro());
+                    funcionario.setCep(funcionarioAtualizado.getCep());
+                    funcionario.setComplemento(funcionarioAtualizado.getComplemento());
+                    funcionario.setNumero(funcionarioAtualizado.getNumero());
+                    funcionario.setUf(funcionarioAtualizado.getUf());
+                    funcionario.setCidade(funcionarioAtualizado.getCidade());
+
+                    funcionarioRepository.save(funcionario);
+                    return ResponseEntity.ok("Funcionário com id " + id + " atualizado com sucesso.");
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionário não encontrado."));
     }
 
     private DadosFuncionario convertToDadosFuncionario(Funcionario funcionario) {

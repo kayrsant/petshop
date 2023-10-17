@@ -76,4 +76,11 @@ public class PetController {
             throw new RuntimeException("Erro ao extrair informações do token JWT", e);
         }
     }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid Pet petAtualizado) {
+            return petService.atualizar(id, petAtualizado);
+    }
+
 }

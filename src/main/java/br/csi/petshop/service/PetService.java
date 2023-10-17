@@ -57,4 +57,23 @@ public class PetService {
         return new DadosPet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente().getId(), pet.getCliente().getNome());
     }
 
+    public ResponseEntity<?> atualizar(Long id, Pet petAtualizado) {
+        Optional<Pet> optionalPet = petRepository.findById(id);
+
+        if (optionalPet.isPresent()) {
+            Pet pet = optionalPet.get();
+
+            pet.setNome(petAtualizado.getNome());
+            pet.setIdade(petAtualizado.getIdade());
+            pet.setRaca(petAtualizado.getRaca());
+            pet.setTipo(petAtualizado.getTipo());
+
+            petRepository.save(pet);
+
+            return ResponseEntity.ok().body("Pet " + id + " atualizado com sucesso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet não encontrado.");
+        }
+    }
+
 }

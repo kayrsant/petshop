@@ -60,6 +60,26 @@ public class ClienteService {
                 .collect(Collectors.toList());
     }
 
+    public ResponseEntity<?> atualizar(Long id, Cliente clienteAtualizado) {
+        return clienteRepository.findById(id)
+                .map(cliente -> {
+                    cliente.setNome(clienteAtualizado.getNome());
+                    cliente.setTelefone(clienteAtualizado.getTelefone());
+                    cliente.setEmail(clienteAtualizado.getEmail());
+                    cliente.setRua(clienteAtualizado.getRua());
+                    cliente.setBairro(clienteAtualizado.getBairro());
+                    cliente.setCep(clienteAtualizado.getCep());
+                    cliente.setComplemento(clienteAtualizado.getComplemento());
+                    cliente.setNumero(clienteAtualizado.getNumero());
+                    cliente.setUf(clienteAtualizado.getUf());
+                    cliente.setCidade(clienteAtualizado.getCidade());
+
+                    clienteRepository.save(cliente);
+                    return ResponseEntity.ok("Cliente com id " + id + " atualizado com sucesso.");
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado."));
+    }
+
     private DadosCliente convertToDadosCliente(Cliente cliente) {
         return new DadosCliente(cliente.getId(), cliente.getNome(), cliente.getTelefone(),
                 cliente.getEmail(), cliente.getRua(), cliente.getBairro(),

@@ -47,4 +47,10 @@ public class AgendamentoController {
     public ResponseEntity<?> deletar(@PathVariable Long id){
         return agendamentoService.deletar(id);
     }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid Agendamento agendamentoAtualizado) {
+        return agendamentoService.atualizar(id, agendamentoAtualizado);
+    }
 }

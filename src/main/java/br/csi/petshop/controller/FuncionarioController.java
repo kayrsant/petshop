@@ -1,5 +1,6 @@
 package br.csi.petshop.controller;
 
+import br.csi.petshop.model.cliente.Cliente;
 import br.csi.petshop.model.funcionario.DadosFuncionario;
 import br.csi.petshop.model.funcionario.Funcionario;
 import br.csi.petshop.model.usuario.UsuarioRepository;
@@ -54,5 +55,11 @@ public class FuncionarioController {
         return funcionarioService.deletar(id);
     }
 
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> atualizar(@PathVariable Long id,
+                                       @RequestBody @Valid Funcionario funcionarioAtualizado) {
+        return funcionarioService.atualizar(id, funcionarioAtualizado);
+    }
 
 }
