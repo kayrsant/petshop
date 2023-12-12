@@ -38,19 +38,22 @@ public class PetController {
     @Transactional
     public ResponseEntity criar(@RequestBody @Valid Pet pet,
                                 @RequestHeader("Authorization") String token) {
+        Cliente clientePet = pet.getCliente();
         String emailUsuario = extrairIdDoToken(token);
+        Cliente clienteToken = null;
 
-        if(emailUsuario == null){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cliente não encontrado na base de dados.");
+        if(clientePet == null){
+            clienteToken = clienteRepository.findByEmail(emailUsuario);
+            if(clienteToken == null){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cliente " + clienteToken + " não encontrado na base de dados.");
+            }
+            clientePet = clienteToken;
         }
 
-        Cliente cliente = clienteRepository.findByEmail(emailUsuario);
-        if(cliente == null){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cliente não encontrado na base de dados.");
-        }
-            pet.setCliente(cliente);
-            petService.cadastrar(pet);
-        return ResponseEntity.created(URI.create("/pet/" + pet.getId())).body(pet);
+        clientePet = clienteRepository.findByEmail(clientePet.getEmail());
+        pet.setCliente(clientePet);
+        petService.cadastrar(pet);
+        return ResponseEntity.created(URI.create("/pet/" + pet.getId())).body(new DadosPet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente().getId(), pet.getCliente().getNome()));
     }
 
     @GetMapping("/{id}")

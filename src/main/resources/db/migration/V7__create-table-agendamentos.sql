@@ -6,10 +6,7 @@ CREATE TABLE agendamentos (
                               id_funcionario INT NOT NULL REFERENCES funcionarios(id),
                               data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                               valor DECIMAL(10, 2) NOT NULL DEFAULT 0,
-                              id_servico INT NOT NULL REFERENCES servicos(id),
-                              status VARCHAR(10) NOT NULL DEFAULT 'aberto',
-                              data_inicio TIMESTAMP NOT NULL,
-                              data_fim TIMESTAMP NOT NULL
+                              status VARCHAR(10) NOT NULL DEFAULT 'aberto'
 );
 
 -- Tabela para os produtos usados no atendimento
@@ -20,3 +17,11 @@ CREATE TABLE produtos_agendamento (
                                       quantidade INT NOT NULL DEFAULT 1,
                                       valor DECIMAL(10, 2) NOT NULL DEFAULT 0
 );
+
+CREATE TABLE servicos_agendamento (
+                                      id SERIAL PRIMARY KEY,
+                                      id_agendamento BIGINT REFERENCES agendamentos(id) NOT NULL,
+                                      id_servico BIGINT REFERENCES servicos(id) NOT NULL,
+                                      valor DOUBLE PRECISION NOT NULL
+);
+

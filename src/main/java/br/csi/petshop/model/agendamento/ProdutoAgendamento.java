@@ -12,7 +12,7 @@ public class ProdutoAgendamento {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_agendamento", nullable = false)
+    @JoinColumn(name="id_agendamento")
     private Agendamento agendamento;
 
     @ManyToOne
@@ -22,12 +22,7 @@ public class ProdutoAgendamento {
     @Column(name = "quantidade", nullable = false)
     private int quantidade;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public ProdutoAgendamento() {
     }
 
     public Agendamento getAgendamento() {
@@ -36,6 +31,14 @@ public class ProdutoAgendamento {
 
     public void setAgendamento(Agendamento agendamento) {
         this.agendamento = agendamento;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Produto getProduto() {

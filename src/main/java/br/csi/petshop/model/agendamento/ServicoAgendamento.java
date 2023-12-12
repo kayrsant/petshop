@@ -3,7 +3,7 @@ package br.csi.petshop.model.agendamento;
 import br.csi.petshop.model.servico.Servico;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
+import java.util.Optional;
 
 @Entity
 @Table(name = "servicos_agendamento")
@@ -14,14 +14,14 @@ public class ServicoAgendamento {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_agendamento", nullable = false)
+    @JoinColumn(name="id_agendamento")
     private Agendamento agendamento;
 
     @ManyToOne
-    @JoinColumn(name = "id_servico", nullable = false)
+    @JoinColumn(name = "id_servico")
     private Servico servico;
 
-    @Column(name = "valor", nullable = false)
+    @Column(name = "preco", nullable = false)
     private double valor;
 
     public Long getId() {
@@ -32,16 +32,16 @@ public class ServicoAgendamento {
         this.id = id;
     }
 
+    public Servico getServico() {
+        return servico;
+    }
+
     public Agendamento getAgendamento() {
         return agendamento;
     }
 
     public void setAgendamento(Agendamento agendamento) {
         this.agendamento = agendamento;
-    }
-
-    public Servico getServico() {
-        return servico;
     }
 
     public void setServico(Servico servico) {

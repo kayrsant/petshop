@@ -46,11 +46,11 @@ public class Agendamento {
     @Column(name = "valor", nullable = false)
     private double valor;
 
-    @OneToMany(mappedBy = "agendamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProdutoAgendamento> produtos = new ArrayList<>();
+    @OneToMany(mappedBy = "agendamento", orphanRemoval = true)
+    private List<ProdutoAgendamento> produtosAgendamento;
 
-    @OneToMany(mappedBy = "agendamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ServicoAgendamento> servicos = new ArrayList<>();
+    @OneToMany(mappedBy = "agendamento", orphanRemoval = true)
+    private List<ServicoAgendamento> servicosAgendamento;
 
     public Long getId() {
         return id;
@@ -99,21 +99,19 @@ public class Agendamento {
         this.valor = valor;
     }
 
-    public List<ProdutoAgendamento> getProdutos() {
-        return produtos;
+    public List<ProdutoAgendamento> getProdutosAgendamento() {
+        return produtosAgendamento;
     }
 
-    public void setProdutosAgendamento(List<ProdutoAgendamento> produtos) {
-        this.produtos = produtos;
+    public void setProdutosAgendamento(List<ProdutoAgendamento> produtosAgendamento) {
+        this.produtosAgendamento = produtosAgendamento;
     }
 
-    public List<ServicoAgendamento> getServicos() {
-        return servicos;
+    public List<ServicoAgendamento> getServicosAgendamento() {
+        return servicosAgendamento;
     }
 
-    public void setServicosAgendamento(List<ServicoAgendamento> servicos) {
-        this.servicos = servicos;
+    public void setServicosAgendamento(List<ServicoAgendamento> servicosAgendamento) {
+        this.servicosAgendamento = servicosAgendamento;
     }
-
-
 }

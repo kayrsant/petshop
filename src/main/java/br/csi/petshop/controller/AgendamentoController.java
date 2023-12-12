@@ -2,26 +2,39 @@ package br.csi.petshop.controller;
 
 import br.csi.petshop.model.agendamento.Agendamento;
 import br.csi.petshop.model.agendamento.DadosAgendamento;
-import br.csi.petshop.model.funcionario.DadosFuncionario;
-import br.csi.petshop.model.funcionario.Funcionario;
+import br.csi.petshop.model.agendamento.ProdutoAgendamento;
+import br.csi.petshop.model.agendamento.ServicoAgendamento;
+import br.csi.petshop.model.produto.Produto;
+import br.csi.petshop.model.produto.ProdutoRepository;
+import br.csi.petshop.model.servico.Servico;
+import br.csi.petshop.model.servico.ServicoRepository;
 import br.csi.petshop.service.AgendamentoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/agendamento")
 public class AgendamentoController {
     @Autowired
     private final AgendamentoService agendamentoService;
-    public AgendamentoController(AgendamentoService agendamentoService) {
+
+    @Autowired
+    private final ServicoRepository servicoRepository;
+
+    @Autowired
+    private final ProdutoRepository produtoRepository;
+
+    public AgendamentoController(AgendamentoService agendamentoService, ServicoRepository servicoRepository, ProdutoRepository produtoRepository) {
         this.agendamentoService = agendamentoService;
+        this.servicoRepository = servicoRepository;
+        this.produtoRepository = produtoRepository;
     }
 
     @PostMapping("/criar")
@@ -30,6 +43,7 @@ public class AgendamentoController {
                                 @RequestHeader("Authorization") String token) {
         ;
         URI uri = URI.create("/agendamento/" + agendamento.getId());
+
         return agendamentoService.cadastrar(agendamento);
     }
 
