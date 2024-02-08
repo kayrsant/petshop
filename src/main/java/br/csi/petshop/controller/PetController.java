@@ -3,6 +3,7 @@ package br.csi.petshop.controller;
 import br.csi.petshop.infra.security.TokenServiceJWT;
 import br.csi.petshop.model.cliente.Cliente;
 import br.csi.petshop.model.cliente.ClienteRepository;
+import br.csi.petshop.model.pet.DadosClientePet;
 import br.csi.petshop.model.pet.DadosPet;
 import br.csi.petshop.model.pet.Pet;
 import br.csi.petshop.service.PetService;
@@ -53,16 +54,20 @@ public class PetController {
         clientePet = clienteRepository.findByEmail(clientePet.getEmail());
         pet.setCliente(clientePet);
         petService.cadastrar(pet);
-        return ResponseEntity.created(URI.create("/pet/" + pet.getId())).body(new DadosPet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente().getId(), pet.getCliente().getNome()));
+        return ResponseEntity.created(URI.create("/pet/" + pet.getId())).body(new DadosClientePet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(),
+                pet.getCliente().getId(), pet.getCliente().getNome(), pet.getCliente().getTelefone(),
+                pet.getCliente().getEmail(), pet.getCliente().getRua(), pet.getCliente().getBairro(),
+                pet.getCliente().getCep(), pet.getCliente().getComplemento(), pet.getCliente().getNumero(),
+                pet.getCliente().getUf(), pet.getCliente().getCidade()));
     }
 
     @GetMapping("/{id}")
-    public DadosPet findById(@PathVariable Long id) {
+    public DadosClientePet findById(@PathVariable Long id) {
         return petService.findPet(id);
     }
 
     @GetMapping
-    public List<DadosPet> findAll() {
+    public List<DadosClientePet> findAll() {
         return petService.findAllPets();
     }
 

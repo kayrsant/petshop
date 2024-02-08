@@ -1,5 +1,6 @@
 package br.csi.petshop.service;
 
+import br.csi.petshop.model.pet.DadosClientePet;
 import br.csi.petshop.model.pet.DadosPet;
 import br.csi.petshop.model.pet.Pet;
 import br.csi.petshop.model.pet.PetRepository;
@@ -38,14 +39,14 @@ public class PetService {
         return ResponseEntity.status(HttpStatus.OK).body("Pet " + pet.getId() + " deletado");
     }
 
-    public DadosPet findPet(Long id) {
+    public DadosClientePet findPet(Long id) {
         Pet pet = petRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pet não encontrado"));
 
         return convertToDadosPet(pet);
     }
 
-    public List<DadosPet> findAllPets() {
+    public List<DadosClientePet> findAllPets() {
         List<Pet> pets = petRepository.findAll();
 
         return pets.stream()
@@ -53,8 +54,12 @@ public class PetService {
                 .collect(Collectors.toList());
     }
 
-    private DadosPet convertToDadosPet(Pet pet) {
-        return new DadosPet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente().getId(), pet.getCliente().getNome());
+    private DadosClientePet convertToDadosPet(Pet pet) {
+        return new DadosClientePet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(),
+                pet.getCliente().getId(), pet.getCliente().getNome(), pet.getCliente().getTelefone(),
+                pet.getCliente().getEmail(), pet.getCliente().getRua(), pet.getCliente().getBairro(),
+                pet.getCliente().getCep(), pet.getCliente().getComplemento(), pet.getCliente().getNumero(),
+                pet.getCliente().getUf(), pet.getCliente().getCidade());
     }
 
     public ResponseEntity<?> atualizar(Long id, Pet petAtualizado) {
