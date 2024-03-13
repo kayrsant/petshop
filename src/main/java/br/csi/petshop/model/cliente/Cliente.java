@@ -1,6 +1,7 @@
 package br.csi.petshop.model.cliente;
 
 import br.csi.petshop.model.pet.Pet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,6 +48,7 @@ public class Cliente {
     private String cidade;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // Adicione esta anotação para evitar a referência circular
     private List<Pet> pets = new ArrayList<>();
 
     public Long getId() {

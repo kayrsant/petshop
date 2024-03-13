@@ -41,7 +41,6 @@ public class AgendamentoController {
     @Transactional
     public ResponseEntity<?> criar(@RequestBody @Valid Agendamento agendamento,
                                 @RequestHeader("Authorization") String token) {
-        ;
         URI uri = URI.create("/agendamento/" + agendamento.getId());
 
         return agendamentoService.cadastrar(agendamento);

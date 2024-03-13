@@ -3,6 +3,8 @@ package br.csi.petshop.service;
 import br.csi.petshop.model.cliente.Cliente;
 import br.csi.petshop.model.cliente.DadosCliente;
 import br.csi.petshop.model.cliente.ClienteRepository;
+import br.csi.petshop.model.cliente.DadosClienteCadastro;
+import br.csi.petshop.model.produto.DadosProduto;
 import br.csi.petshop.model.usuario.Usuario;
 import br.csi.petshop.model.usuario.UsuarioPermissao;
 import br.csi.petshop.model.usuario.UsuarioRepository;
@@ -24,15 +26,29 @@ public class ClienteService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public void cadastrar(Cliente cliente, String token) {
+    public ResponseEntity<?> cadastrar(DadosClienteCadastro clienteDTO, String token) {
+        Cliente cliente = new Cliente();
+        cliente.setNome(clienteDTO.nome());
+        cliente.setTelefone(clienteDTO.telefone());
+        cliente.setEmail(clienteDTO.email());
+        cliente.setRua(clienteDTO.rua());
+        cliente.setBairro(clienteDTO.bairro());
+        cliente.setCidade(clienteDTO.cidade());
+        cliente.setNumero(clienteDTO.numero());
+        cliente.setUf(clienteDTO.uf());
+        cliente.setCep(clienteDTO.cep());
+        cliente.setComplemento(clienteDTO.complemento());
+
         Usuario u = new Usuario();
-        Usuario t = this.usuarioRepository.findByLogin(cliente.getEmail());
-        u.setLogin(cliente.getEmail());
+        Usuario t = this.usuarioRepository.findByLogin(clienteDTO.email());
+        u.setLogin(clienteDTO.email());
         u.setSenha(new BCryptPasswordEncoder().encode("123456789"));
         u.setPermissao(UsuarioPermissao.CLIENTE);
 
         clienteRepository.save(cliente);
         usuarioRepository.save(u);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cliente);
     }
 
     public ResponseEntity<?> deletar(Long id){
@@ -54,10 +70,14 @@ public class ClienteService {
     public List<DadosCliente> findAllClientes() {
         List<Cliente> clientes = clienteRepository.findAll();
 
-        // Converte a lista de entidades para uma lista de DadosCliente
+        List<DadosCliente> dadosClientes = DadosCliente.fromClientes(clientes);
+
+        /* Converte a lista de entidades para uma lista de DadosCliente
         return clientes.stream()
                 .map(this::convertToDadosCliente)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+
+        return dadosClientes;
     }
 
     public ResponseEntity<?> atualizar(Long id, Cliente clienteAtualizado) {
@@ -84,6 +104,6 @@ public class ClienteService {
         return new DadosCliente(cliente.getId(), cliente.getNome(), cliente.getTelefone(),
                 cliente.getEmail(), cliente.getRua(), cliente.getBairro(),
                 cliente.getCep(), cliente.getComplemento(), cliente.getNumero(),
-                cliente.getUf(), cliente.getCidade());
+                cliente.getUf(), cliente.getCidade(), cliente.getPets());
     }
 }

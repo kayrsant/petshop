@@ -28,6 +28,7 @@ public class Pet {
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
+    //@JsonIgnore // Adicione esta anotação para evitar a referência circular
     private Cliente cliente;
 
 

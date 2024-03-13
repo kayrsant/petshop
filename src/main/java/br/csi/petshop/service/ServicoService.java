@@ -21,8 +21,13 @@ public class ServicoService {
         this.servicoRepository = servicoRepository;
     }
 
-    public void cadastrar(Servico servico) {
-        servicoRepository.save(servico);
+    public ResponseEntity<?> cadastrar(DadosServico servico) {
+        Servico servicoNovo = new Servico();
+        servicoNovo.setNome(servico.nome());
+        servicoNovo.setDescricao(servico.descricao());
+        servicoNovo.setPreco(servico.preco());
+        servicoRepository.save(servicoNovo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(servicoNovo);
     }
 
     public ResponseEntity<?> deletar(Long id){
@@ -50,7 +55,7 @@ public class ServicoService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<?> atualizar(Long id, Servico servicoAtualizado){
+    public ResponseEntity<?> atualizar(Long id, DadosServico servicoAtualizado){
         try{
             Optional<Servico> servicoExistenteOpt = this.servicoRepository.findById(id);
 
@@ -60,9 +65,9 @@ public class ServicoService {
 
             Servico servicoExistente = servicoExistenteOpt.get();
 
-            servicoExistente.setNome(servicoAtualizado.getNome());
-            servicoExistente.setDescricao(servicoAtualizado.getDescricao());
-            servicoExistente.setPreco(servicoAtualizado.getPreco());
+            servicoExistente.setNome(servicoAtualizado.nome());
+            servicoExistente.setDescricao(servicoAtualizado.descricao());
+            servicoExistente.setPreco(servicoAtualizado.preco());
 
             this.servicoRepository.save(servicoExistente);
 

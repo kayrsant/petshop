@@ -2,6 +2,7 @@ package br.csi.petshop.controller;
 
 import br.csi.petshop.model.cliente.Cliente;
 import br.csi.petshop.model.cliente.DadosCliente;
+import br.csi.petshop.model.cliente.DadosClienteCadastro;
 import br.csi.petshop.service.ClienteService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -22,14 +23,15 @@ public class ClienteController {
 
     @PostMapping("/cadastrar")
     @Transactional
-    public ResponseEntity criar(@RequestBody @Valid Cliente cliente,
-                                @RequestHeader("Authorization") String token) {
-        clienteService.cadastrar(cliente, token);
+    public ResponseEntity<?> criar(@RequestBody @Valid Cliente cliente,
+                                              @RequestHeader("Authorization") String token) {
 
-        URI uri = URI.create("/cliente/" + cliente.getId());
-        return ResponseEntity.created(uri).body(cliente);
+        URI uri = URI.create("/clientes/" + cliente.getId());
+
+        DadosClienteCadastro dadosClienteCadastro = DadosClienteCadastro.fromCliente(cliente);
+
+        return clienteService.cadastrar(dadosClienteCadastro, token);
     }
-
 
     @GetMapping("/{id}")
     public DadosCliente findById(@PathVariable Long id) {

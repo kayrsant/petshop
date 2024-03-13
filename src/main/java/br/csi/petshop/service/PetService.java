@@ -25,8 +25,18 @@ public class PetService {
         this.petRepository = petRepository;
     }
 
-    public void cadastrar(Pet pet) {
-        petRepository.save(pet);
+    public ResponseEntity<?> cadastrar(DadosClientePet pet) {
+
+        Pet newPet = new Pet();
+        newPet.setIdade(pet.idade());
+        newPet.setNome(pet.nome());
+        newPet.setRaca(pet.raca());
+        newPet.setTipo(pet.tipo());
+        newPet.setCliente(pet.cliente());
+
+        petRepository.save(newPet);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPet);
     }
 
     public ResponseEntity<?> deletar(Long id){
@@ -55,11 +65,7 @@ public class PetService {
     }
 
     private DadosClientePet convertToDadosPet(Pet pet) {
-        return new DadosClientePet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(),
-                pet.getCliente().getId(), pet.getCliente().getNome(), pet.getCliente().getTelefone(),
-                pet.getCliente().getEmail(), pet.getCliente().getRua(), pet.getCliente().getBairro(),
-                pet.getCliente().getCep(), pet.getCliente().getComplemento(), pet.getCliente().getNumero(),
-                pet.getCliente().getUf(), pet.getCliente().getCidade());
+        return new DadosClientePet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente());
     }
 
     public ResponseEntity<?> atualizar(Long id, Pet petAtualizado) {

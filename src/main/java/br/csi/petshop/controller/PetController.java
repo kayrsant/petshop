@@ -51,14 +51,12 @@ public class PetController {
             clientePet = clienteToken;
         }
 
-        clientePet = clienteRepository.findByEmail(clientePet.getEmail());
-        pet.setCliente(clientePet);
-        petService.cadastrar(pet);
-        return ResponseEntity.created(URI.create("/pet/" + pet.getId())).body(new DadosClientePet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(),
-                pet.getCliente().getId(), pet.getCliente().getNome(), pet.getCliente().getTelefone(),
-                pet.getCliente().getEmail(), pet.getCliente().getRua(), pet.getCliente().getBairro(),
-                pet.getCliente().getCep(), pet.getCliente().getComplemento(), pet.getCliente().getNumero(),
-                pet.getCliente().getUf(), pet.getCliente().getCidade()));
+        URI uri = URI.create("/pet/" + pet.getId());
+
+        DadosClientePet dadosPet = new DadosClientePet(pet.getId(), pet.getNome(), pet.getIdade(), pet.getRaca(), pet.getTipo(), pet.getCliente());
+
+        return petService.cadastrar(dadosPet);
+
     }
 
     @GetMapping("/{id}")

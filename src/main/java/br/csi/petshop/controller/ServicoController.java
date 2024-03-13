@@ -32,8 +32,12 @@ public class ServicoController {
     @PostMapping("/cadastrar")
     @Transactional
     public ResponseEntity criar(@RequestBody @Valid Servico servico) {
-        servicoService.cadastrar(servico);
-        return ResponseEntity.created(URI.create("/servico/" + servico.getId())).body(servico);
+
+        DadosServico dadosServico = new DadosServico(servico);
+
+        URI uri = URI.create("/servico/" + servico.getId());
+
+        return servicoService.cadastrar(dadosServico);
     }
 
     @GetMapping("/{id}")
@@ -52,7 +56,7 @@ public class ServicoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid Servico servico){
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid DadosServico servico){
         return servicoService.atualizar(id, servico);
     }
 

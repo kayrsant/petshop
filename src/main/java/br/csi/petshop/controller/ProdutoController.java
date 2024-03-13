@@ -3,10 +3,12 @@ package br.csi.petshop.controller;
 import br.csi.petshop.model.produto.DadosProduto;
 import br.csi.petshop.model.produto.Produto;
 import br.csi.petshop.model.produto.ProdutoRepository;
+import br.csi.petshop.model.produto.ProdutoTipo;
 import br.csi.petshop.service.ProdutoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +33,11 @@ public class ProdutoController {
 
     @PostMapping("/cadastrar")
     @Transactional
-    public ResponseEntity criar(@RequestBody @Valid Produto produto) {
-        produtoService.cadastrar(produto);
-        return ResponseEntity.created(URI.create("/produto/" + produto.getId())).body(produto);
+    public ResponseEntity criar(@RequestBody @Valid DadosProduto produto) {
+        URI uri = URI.create("/produto/" + produto.id());
+        return produtoService.cadastrar(produto);
     }
+
 
     @GetMapping("/{id}")
     public DadosProduto findById(@PathVariable Long id) {

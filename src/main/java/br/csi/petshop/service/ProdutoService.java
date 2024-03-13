@@ -3,6 +3,7 @@ package br.csi.petshop.service;
 import br.csi.petshop.model.produto.DadosProduto;
 import br.csi.petshop.model.produto.Produto;
 import br.csi.petshop.model.produto.ProdutoRepository;
+import br.csi.petshop.model.produto.ProdutoTipo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,15 @@ public class ProdutoService {
         this.produtoRepository = produtoRepository;
     }
 
-    public void cadastrar(Produto produto) {
-        produtoRepository.save(produto);
+    public ResponseEntity<?> cadastrar(DadosProduto produto) {
+        Produto p = new Produto();
+        p.setId(produto.id());
+        p.setNome(produto.nome());
+        p.setDescricao(produto.descricao());
+        p.setTipo(produto.tipo());
+        p.setPreco(produto.preco());
+        produtoRepository.save(p);
+        return ResponseEntity.ok(p);
     }
 
     public ResponseEntity<?> deletar(Long id){
